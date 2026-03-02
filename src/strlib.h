@@ -82,7 +82,4 @@ bool            string_view_empty(const string_view_t str);                     
 
 void            string_free(string_t *str);                                             // Frees the memory allocated to str and writes 0 to both size and capacity
 
-
-
-
 #endif
