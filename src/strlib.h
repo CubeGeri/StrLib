@@ -129,6 +129,8 @@ void printf_log(error_t error, const char* fmt, ...) {
     free(buff);  
 }  
 
+
+
 string_t string_create(void)
 {
     
@@ -141,3 +143,4 @@ string_t string_create(void)
 #endif // STRLIB_IMPLEMENTATION
 
 #endif // STRLIB_H_
+
