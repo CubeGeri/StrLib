@@ -33,6 +33,12 @@
 
 typedef unsigned char byte;
 
+typedef enum {
+    LOG_INFO = 0,
+    LOG_WARNING,
+    LOG_ERROR,
+} error_t;
+
 typedef struct {
     byte *data;
     size_t size;
@@ -82,4 +88,56 @@ bool            string_view_empty(const string_view_t str);                     
 
 void            string_free(string_t *str);                                             // Frees the memory allocated to str and writes 0 to both size and capacity
 
-#endif
+void print_log(error_t error, const char* fmt, ...);
+
+#if defined(STRLIB_IMPLEMENTATION)
+
+void printf_log(error_t error, const char* fmt, ...) {
+    const char* prefix;  
+    switch (error) {  
+        case LOG_INFO:  
+            prefix = "[INFO]: ";  
+            break;  
+        case LOG_WARNING:  
+            prefix = "[WARNING]: ";  
+            break;  
+        case LOG_ERROR:  
+            prefix = "[ERROR]: ";  
+            break;  
+        default:  
+            prefix = "[UNKNOWN]: ";  
+            break;  
+    }
+    int prefix_len = strlen(prefix);  
+    int fmt_len = strlen(fmt);  
+    int buff_len = prefix_len + fmt_len + 1;
+  
+    char* buff = (char*)malloc(buff_len);  
+    if (!buff) {
+        fprintf(stderr, "Memory allocation failed\n");  
+        return;  
+    }  
+  
+    strcpy(buff, prefix);  
+    strcat(buff, fmt);  
+   
+    va_list args;  
+    va_start(args, fmt);  
+    vprintf(buff, args);  
+    va_end(args);  
+   
+    free(buff);  
+}  
+
+string_t string_create(void)
+{
+    
+    string_t out = {0};
+    out.data = (byte*)malloc(STR_INIT_CAP);
+    if (out.data == NULL) {
+    }
+}
+
+#endif // STRLIB_IMPLEMENTATION
+
+#endif // STRLIB_H_
